@@ -5,8 +5,6 @@ import es.urjccode.mastercloudapps.adcs.draughts.utils.YesNoDialog;
 
 class ResumeView extends SubView {
 
-    private static final String MESSAGE = "¿Queréis jugar otra";
-    
     private YesNoDialog yesNoDialog;
 
     ResumeView(){
@@ -16,7 +14,7 @@ class ResumeView extends SubView {
 
     void interact(ResumeController resumeController) {
         assert resumeController != null;
-        if (this.yesNoDialog.read(ResumeView.MESSAGE))
+        if (this.yesNoDialog.read(InformView.RESUME.toString()))
             resumeController.reset();
         else
             resumeController.next();

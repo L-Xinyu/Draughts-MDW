@@ -10,14 +10,12 @@ import es.urjccode.mastercloudapps.adcs.draughts.models.Color;
 import es.urjccode.mastercloudapps.adcs.draughts.models.Coordinate;
 
 class PlayView extends SubView {
-    
+
     private static final String COLOR_PARAM = "#color";
     private static final String[] COLOR_VALUES = { "blancas", "negras" };
     private static final String PROMPT = "Mueven las " + PlayView.COLOR_PARAM + ": ";
     private static final String CANCEL_FORMAT = "-1";
     private static final String MOVEMENT_FORMAT = "[1-8]{2}(\\.[1-8]{2}){1,2}";
-    private static final String ERROR_MESSAGE = "Error!!! Formato incorrecto";
-    private static final String LOST_MESSAGE = "Derrota!!! No puedes mover tus fichas!!!";
     private String string;
 
     PlayView() {
@@ -58,7 +56,7 @@ class PlayView extends SubView {
     }
 
     private void writeError(){
-        this.console.writeln(PlayView.ERROR_MESSAGE);
+            InformView.ERROR.writeln();
     }
 
     private Coordinate[] getCoordinates() {
@@ -78,7 +76,7 @@ class PlayView extends SubView {
     }
 
     private void writeLost() {
-        this.console.writeln(LOST_MESSAGE);
+            InformView.LOOSER.writeln();
     }
 
 }
