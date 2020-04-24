@@ -38,6 +38,7 @@ class PlayView extends SubView {
                 new GameView().write(playController);
                 if (error == null && playController.isBlocked())
                     this.writeLost();
+                playController.gameOver();
             }
         } while (error != null);
     }

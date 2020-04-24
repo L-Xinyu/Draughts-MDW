@@ -1,10 +1,7 @@
 package es.urjccode.mastercloudapps.adcs.draughts.controllers;
 
-import es.urjccode.mastercloudapps.adcs.draughts.models.Color;
-import es.urjccode.mastercloudapps.adcs.draughts.models.Coordinate;
-import es.urjccode.mastercloudapps.adcs.draughts.models.State;
+import es.urjccode.mastercloudapps.adcs.draughts.models.*;
 import es.urjccode.mastercloudapps.adcs.draughts.models.Error;
-import es.urjccode.mastercloudapps.adcs.draughts.models.Game;
 
 public class PlayController extends InteractorController {
 
@@ -32,6 +29,12 @@ public class PlayController extends InteractorController {
 	public boolean isBlocked() {
 		return this.game.isBlocked();
 	}
+
+	public Piece getPiece(Coordinate coordinate){
+	    return this.game.getPiece(coordinate);
+    }
+
+    public void gameOver(){this.state.next();}
 
 	@Override
 	public void accept(InteractorControllersVisitor controllersVisitor) {
