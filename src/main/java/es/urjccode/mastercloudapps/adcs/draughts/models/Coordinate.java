@@ -11,6 +11,12 @@ public class Coordinate {
     private static final int UPPER_LIMIT = 7;
     private static final int DIMENSION = UPPER_LIMIT + 1;
 
+    public Coordinate(String coordinatesString){
+        int number = Integer.parseInt(coordinatesString);
+        this.row = number/10-1;
+        this.column = number%10-1;
+    }
+
     public Coordinate(int row, int column) {
         this.row = row;
         this.column = column;
@@ -47,8 +53,8 @@ public class Coordinate {
     Direction getDirection(Coordinate coordinate) {
         assert coordinate != null;
         Coordinate substract = coordinate.substract(this);
-        for (Direction direction : Direction.values()) 
-            if (direction.isOnDirection(substract)) 
+        for (Direction direction : Direction.values())
+            if (direction.isOnDirection(substract))
                 return direction;
         return null;
     }

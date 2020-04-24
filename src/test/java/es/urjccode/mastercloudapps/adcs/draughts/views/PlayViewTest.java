@@ -54,7 +54,7 @@ public class PlayViewTest {
         playView.interact(playController);
         verify(playController).move(new Coordinate(2, 1), new Coordinate(3, 0));
     }
-    
+
 
     @Test
     public void testGivenPlayViewWhenInteractWithBadFormatThenError() {
@@ -102,9 +102,17 @@ public class PlayViewTest {
         when(console.readString("Mueven las negras: ")).thenReturn("23.32.41");
         playView.interact(playController);
         verify(playController).move(
-            new Coordinate(1, 2), 
+            new Coordinate(1, 2),
             new Coordinate(2, 1),
             new Coordinate(3, 0));
+    }
+
+    @Test()
+    public void testGivenPlayViewWhenMoveWithOuterCoordinateThenOutCoordinateError() {
+        when(playController.getColor()).thenReturn(Color.BLACK);
+        when(console.readString("Mueven las negras: ")).thenReturn("01.09").thenReturn("32.41");
+        playView.interact(playController);
+        verify(playController).move(new Coordinate(2,1), new Coordinate(3, 0));
     }
 
 }
