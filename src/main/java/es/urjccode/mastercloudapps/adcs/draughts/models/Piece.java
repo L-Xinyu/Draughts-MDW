@@ -74,4 +74,31 @@ public abstract class Piece {
 		return true;
 	}
 
+    public boolean isDiagonalMovement(Coordinate origin,Coordinate target){
+        if (origin.isOnDiagonal(target))
+            return true;
+        return false;
+    }
+
+    public boolean isAdvancedMovement(Coordinate origin,Coordinate target){
+        if (this.isAdvanced(origin, target))
+            return true;
+        return false;
+    }
+
+    public boolean isBadDistanceMovement(Coordinate origin,Coordinate target){
+        if (origin.getDiagonalDistance(target) >= 3)
+            return true;
+        return false;
+    }
+
+    public boolean isEatingMovement(Coordinate origin, Coordinate target){
+        if (origin.getDiagonalDistance(target) == 2)
+            return true;
+        return false;
+    }
+
+    public Coordinate getEatedPieceCoordinate(Coordinate origin, Coordinate target){
+        return origin.getBetweenDiagonalCoordinate(target);
+    }
 }

@@ -58,9 +58,31 @@ public class Game {
 			return Error.EMPTY_ORIGIN;
 		if (this.turn.getOppositeColor() == this.board.getColor(coordinates[pair]))
 			return Error.OPPOSITE_PIECE;
+
+		Piece piece = this.board.getPiece(coordinates[pair]);
+		if(!piece.isDiagonalMovement(coordinates[pair],coordinates[pair])){
+		    return Error.NOT_DIAGONAL;
+        }
+
+		if(!piece.isAdvancedMovement(coordinates[pair],coordinates[pair])){
+		    return Error.NOT_ADVANCED;
+        }
+
+        if(!piece.isBadDistanceMovement(coordinates[pair],coordinates[pair])){
+            return Error.BAD_FORMAT;
+        }
+
+        if (piece.isEatingMovement(coordinates[pair],coordinates[pair])){
+            Coordinate between = piece.getEatedPieceCoordinate(coordinates[pair],coordinates[pair]);
+            if (this.board.getPiece(between) == null) {
+                return Error.WITHOUT_EATING;
+            }
+            this.board.remove(between);
+        }
+
 		if (!this.board.isEmpty(coordinates[pair + 1]))
 			return Error.NOT_EMPTY_TARGET;
-		List<Piece> betweenDiagonalPieces = 
+		List<Piece> betweenDiagonalPieces =
 			this.board.getBetweenDiagonalPieces(coordinates[pair], coordinates[pair + 1]);
 		return this.board.getPiece(coordinates[pair]).isCorrectMovement(betweenDiagonalPieces, pair, coordinates);
 	}
