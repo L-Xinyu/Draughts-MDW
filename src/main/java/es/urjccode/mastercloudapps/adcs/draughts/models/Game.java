@@ -51,41 +51,51 @@ public class Game {
 		return error;
 	}
 
-	private Error isCorrectPairMove(int pair, Coordinate... coordinates) {
-		assert coordinates[pair] != null;
-		assert coordinates[pair + 1] != null;
-		if (board.isEmpty(coordinates[pair]))
-			return Error.EMPTY_ORIGIN;
-		if (this.turn.getOppositeColor() == this.board.getColor(coordinates[pair]))
-			return Error.OPPOSITE_PIECE;
-
-		Piece piece = this.board.getPiece(coordinates[pair]);
-		if(!piece.isDiagonalMovement(coordinates[pair],coordinates[pair])){
-		    return Error.NOT_DIAGONAL;
+    public Error move(Coordinate origin, Coordinate target) {
+        if (board.isEmpty(origin)) {
+            return Error.EMPTY_ORIGIN;
         }
-
-		if(!piece.isAdvancedMovement(coordinates[pair],coordinates[pair])){
-		    return Error.NOT_ADVANCED;
+        Piece piece = this.board.getPiece(origin);
+        if (this.turn.getColor() != piece.getColor()) {
+            return Error.OPPOSITE_PIECE;
         }
-
-        if(!piece.isBadDistanceMovement(coordinates[pair],coordinates[pair])){
+        if (!piece.isDiagonalMovement(origin,target)){
+            return Error.NOT_DIAGONAL;
+        }
+        if (!piece.isAdvancedMovement(origin,target)){
+            return Error.NOT_ADVANCED;
+        }
+        if (piece.isBadDistanceMovement(origin,target)){
             return Error.BAD_FORMAT;
         }
-
-        if (piece.isEatingMovement(coordinates[pair],coordinates[pair])){
-            Coordinate between = piece.getEatedPieceCoordinate(coordinates[pair],coordinates[pair]);
+        if (!this.board.isEmpty(target)) {
+            return Error.NOT_EMPTY_TARGET;
+        }
+        if (piece.isEatingMovement(origin,target)){
+            Coordinate between = piece.getEatedPieceCoordinate(origin, target);
             if (this.board.getPiece(between) == null) {
                 return Error.WITHOUT_EATING;
             }
             this.board.remove(between);
         }
+        this.board.move(origin, target);
+        this.turn.change();
+        return null;
+    }
 
-		if (!this.board.isEmpty(coordinates[pair + 1]))
-			return Error.NOT_EMPTY_TARGET;
-		List<Piece> betweenDiagonalPieces =
-			this.board.getBetweenDiagonalPieces(coordinates[pair], coordinates[pair + 1]);
-		return this.board.getPiece(coordinates[pair]).isCorrectMovement(betweenDiagonalPieces, pair, coordinates);
-	}
+    private Error isCorrectPairMove(int pair, Coordinate... coordinates) {
+        assert coordinates[pair] != null;
+        assert coordinates[pair + 1] != null;
+        if (board.isEmpty(coordinates[pair]))
+            return Error.EMPTY_ORIGIN;
+        if (this.turn.getOppositeColor() == this.board.getColor(coordinates[pair]))
+            return Error.OPPOSITE_PIECE;
+        if (!this.board.isEmpty(coordinates[pair + 1]))
+            return Error.NOT_EMPTY_TARGET;
+        List<Piece> betweenDiagonalPieces =
+            this.board.getBetweenDiagonalPieces(coordinates[pair], coordinates[pair + 1]);
+        return this.board.getPiece(coordinates[pair]).isCorrectMovement(betweenDiagonalPieces, pair, coordinates);
+    }
 
 	private void pairMove(List<Coordinate> removedCoordinates, int pair, Coordinate... coordinates) {
 		Coordinate forRemoving = this.getBetweenDiagonalPiece(pair, coordinates);
