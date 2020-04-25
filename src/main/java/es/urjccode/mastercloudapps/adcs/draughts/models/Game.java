@@ -32,24 +32,27 @@ public class Game {
 			this.turn.change();
 	}
 
-	public Error move(Coordinate... coordinates) {
-		Error error = null;
-		List<Coordinate> removedCoordinates = new ArrayList<Coordinate>();
-		int pair = 0;
-		do {
-			error = this.isCorrectPairMove(pair, coordinates);
-			if (error == null) {
-				this.pairMove(removedCoordinates, pair, coordinates);
-				pair++;
-			}
-		} while (pair < coordinates.length - 1 && error == null);
-		error = this.isCorrectGlobalMove(error, removedCoordinates, coordinates);
-		if (error == null)
-			this.turn.change();
-		else
-			this.unMovesUntilPair(removedCoordinates, pair, coordinates);
-		return error;
-	}
+    public Error move(Coordinate... coordinates) {
+        Error error = null;
+        List<Coordinate> removedCoordinates = new ArrayList<Coordinate>();
+        List<Coordinate> moveAvailablePieces = new ArrayList<Coordinate>();
+        int pair = 0;
+        do {
+            error = this.isCorrectPairMove(pair, coordinates);
+            if (error == null) {
+                this.pairMove(removedCoordinates, pair, coordinates);
+                pair++;
+            }
+        } while (pair < coordinates.length - 1 && error == null);
+        error = this.isCorrectGlobalMove(error, removedCoordinates, coordinates);
+        if (error == null) {
+            if (removedCoordinates.size() == 0 && moveAvailablePieces.size() != 0)
+                this.removeRandomPieceAfterPieceNotEating(coordinates[0], coordinates[coordinates.length - 1], moveAvailablePieces);
+            this.turn.change();
+        } else
+            this.unMovesUntilPair(removedCoordinates, pair, coordinates);
+        return error;
+    }
 
     public Error move(Coordinate origin, Coordinate target) {
         if (board.isEmpty(origin)) {
@@ -110,6 +113,15 @@ public class Game {
 			this.board.put(coordinates[pair + 1], new Draught(color));
 		}
 	}
+
+
+    private void removeRandomPieceAfterPieceNotEating(Coordinate origin, Coordinate lastTarget, List<Coordinate> coordinates) {
+        final int random = (int) Math.random() * coordinates.size();
+        if (coordinates.get(random).equals(origin))
+            this.board.remove(lastTarget);
+        else
+            this.board.remove(coordinates.get(random));
+    }
 
 	private Coordinate getBetweenDiagonalPiece(int pair, Coordinate... coordinates) {
 		assert coordinates[pair].isOnDiagonal(coordinates[pair + 1]);
