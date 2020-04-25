@@ -63,4 +63,56 @@ public class RemovingRandomPieceAfterNotEatingPiece extends GameTest{
             new Coordinate(4, 7)
         );
     }
+
+    @Test
+    public void testMoveAndNotRemovingAnyPieceWithWhitePieces(){
+        this.setGame(Color.WHITE,
+            "        ",
+            "        ",
+            "        ",
+            "        ",
+            "   n    ",
+            "  b     ",
+            "        ",
+            "        ");
+        this.setExpectedGame(Color.BLACK,
+            "        ",
+            "        ",
+            "        ",
+            "    b   ",
+            "        ",
+            "        ",
+            "        ",
+            "        ");
+        this.assertMove(
+            new Coordinate(5, 2),
+            new Coordinate(3, 4)
+        );
+    }
+
+    @Test
+    public void testMoveAndNotRemovingAnyPieceWithBlackPieces(){
+        this.setGame(Color.BLACK,
+            "        ",
+            "        ",
+            "        ",
+            "    n   ",
+            "   b    ",
+            "        ",
+            "        ",
+            "        ");
+        this.setExpectedGame(Color.WHITE,
+            "        ",
+            "        ",
+            "        ",
+            "        ",
+            "        ",
+            "  n     ",
+            "        ",
+            "        ");
+        this.assertMove(
+            new Coordinate(3, 4),
+            new Coordinate(5, 2)
+        );
+    }
 }
