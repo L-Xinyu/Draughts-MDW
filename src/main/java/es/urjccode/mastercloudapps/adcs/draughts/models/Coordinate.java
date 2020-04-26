@@ -63,6 +63,10 @@ public class Coordinate {
         return this.getDirection(coordinate) != null;
     }
 
+    Coordinate getDiagonalCoordinate(Direction direction, int level){
+        return this.plus(direction.getDistanceCoordinate(level));
+    }
+
     int getDiagonalDistance(Coordinate coordinate) {
         assert this.isOnDiagonal(coordinate);
         return Math.abs(this.substract(coordinate).getRow());
