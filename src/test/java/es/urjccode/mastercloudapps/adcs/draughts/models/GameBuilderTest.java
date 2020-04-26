@@ -21,7 +21,6 @@ public class GameBuilderTest {
         this.gameBuilder.rows(
             "        ",
             "        ",
- //           "        ",
             "        ",
             "        ",
             "        ",
