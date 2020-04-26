@@ -100,19 +100,14 @@ public class Game {
         return this.board.getPiece(coordinates[pair]).isCorrectMovement(betweenDiagonalPieces, pair, coordinates);
     }
 
-	private void pairMove(List<Coordinate> removedCoordinates, int pair, Coordinate... coordinates) {
-		Coordinate forRemoving = this.getBetweenDiagonalPiece(pair, coordinates);
-		if (forRemoving != null) {
-			removedCoordinates.add(0, forRemoving);
-			this.board.remove(forRemoving);
-		}
-		this.board.move(coordinates[pair], coordinates[pair + 1]);
-		if (this.board.getPiece(coordinates[pair + 1]).isLimit(coordinates[pair + 1])) {
-			Color color = this.board.getColor(coordinates[pair + 1]);
-			this.board.remove(coordinates[pair + 1]);
-			this.board.put(coordinates[pair + 1], new Draught(color));
-		}
-	}
+    private void pairMove(List<Coordinate> removedCoordinates, int pair, Coordinate... coordinates) {
+        Coordinate forRemoving = this.getBetweenDiagonalPiece(pair, coordinates);
+        if (forRemoving != null) {
+            removedCoordinates.add(0, forRemoving);
+            this.board.remove(forRemoving);
+        }
+        this.board.move(coordinates[pair], coordinates[pair + 1]);
+    }
 
 
     private void removeRandomPieceAfterPieceNotEating(Coordinate origin, Coordinate lastTarget, List<Coordinate> coordinates) {
