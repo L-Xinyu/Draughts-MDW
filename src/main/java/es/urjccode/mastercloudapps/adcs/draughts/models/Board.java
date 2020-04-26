@@ -8,6 +8,10 @@ class Board {
 
     private Piece[][] pieces;
 
+    private final int MAXIMUM_LIMIT_TO_JUMP = Coordinate.getDimension() - 2;
+
+    private final int MINIMUM_LIMIT_TO_JUMP = 1;
+
     Board() {
         this.pieces = new Piece[Coordinate.getDimension()][Coordinate.getDimension()];
         for (int i = 0; i < Coordinate.getDimension(); i++)
@@ -66,6 +70,35 @@ class Board {
 
     boolean isEmpty(Coordinate coordinate) {
         return this.getPiece(coordinate) == null;
+    }
+
+    List<Coordinate> getAvailablePiecesToJump(Color color, List<Coordinate> coordinates) {
+        List<Coordinate> availablePiecesToJump = new ArrayList<Coordinate>();
+        for (Coordinate coordinate : coordinates) {
+            this.diagonalsCheck(availablePiecesToJump, color, coordinate);
+        }
+        return availablePiecesToJump;
+    }
+
+    void diagonalsCheck(List<Coordinate> availablePiecesToJump, Color color, Coordinate coordinate) {
+        if (color.equals(Color.WHITE) && coordinate.getRow() > MINIMUM_LIMIT_TO_JUMP) {
+            if (coordinate.getColumn() < MAXIMUM_LIMIT_TO_JUMP && jumpIsPossible(coordinate, Direction.SE))
+                availablePiecesToJump.add(coordinate);
+            if (coordinate.getColumn() > MINIMUM_LIMIT_TO_JUMP && jumpIsPossible(coordinate, Direction.SW))
+                availablePiecesToJump.add(coordinate);
+        }
+        if (color.equals(Color.BLACK) && coordinate.getRow() < MAXIMUM_LIMIT_TO_JUMP) {
+            if (coordinate.getColumn() > MINIMUM_LIMIT_TO_JUMP && jumpIsPossible(coordinate, Direction.NW))
+                availablePiecesToJump.add(coordinate);
+            if (coordinate.getColumn() < MAXIMUM_LIMIT_TO_JUMP && jumpIsPossible(coordinate, Direction.NE))
+                availablePiecesToJump.add(coordinate);
+        }
+    }
+
+    boolean jumpIsPossible(Coordinate coordinate, Direction direction) {
+        return this.getPiece(coordinate.getDiagonalCoordinate(direction, 1)) != null
+            && !this.getColor(coordinate.getDiagonalCoordinate(direction, 1)).equals(this.getColor(coordinate))
+            && this.getPiece(coordinate.getDiagonalCoordinate(direction, 2)) == null;
     }
 
     @Override
